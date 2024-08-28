@@ -48,7 +48,7 @@ class FlaskTestCase(unittest.TestCase):
             with open(self.FILE_PATH, 'rb') as f:
                 response = self.client.post("/", data={'image': (f, 'sample_ktp.png')}, headers={'X-API-KEY': self.API_KEY})
                 print(response.data)
-                self.assertEqual(response.status_code, 500)
+                self.assertEqual(response.status_code, 200)
 
     def test_method_not_allowed(self):
         """Test invalid method used (PUT instead of POST)."""
