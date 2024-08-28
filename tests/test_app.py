@@ -68,7 +68,6 @@ class FlaskTestCase(unittest.TestCase):
         print(response.data)
         self.assertEqual(response.status_code, 400)
 
-    @patch('app.upload_image')
     def test_process_document(self):
         """Test the document processing functionality."""
         with open(self.FILE_PATH, 'rb') as f:
@@ -76,6 +75,8 @@ class FlaskTestCase(unittest.TestCase):
             # Convert the response data to a dictionary
             response_data = response.get_json()
             print(response_data)
+            self.assertEqual(response_data['message'], "Proses OCR Berhasil")
+
 
 
 if __name__ == '__main__':
