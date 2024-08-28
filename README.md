@@ -16,102 +16,109 @@ This Flask application performs Optical Character Recognition (OCR) on Indonesia
 - PyTesseract
 - Pillow
 - pytest (for testing)
-
 ## Installation
 
-1. **Clone the repository**:
+1. Create a virtual environment (recommended) and activate it.
+
+2. Install the required dependencies:
 
    ```bash
-   git clone https://github.com/yourusername/ocr-ktp-flask.git
-   cd ocr-ktp-flask
+   pip install --no-cache-dir -r requirements.txt
    ```
 
-2. **Create a virtual environment** (optional but recommended):
+3. Create a file named `.env` in your project directory and add the following environment variables, replacing the placeholders with your actual values:
 
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```env
+   GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/credentials.json
+   PROJECT_ID=your-project-id
+   LOCATION_ID=your-location-id
+   PROCESSOR_ID=your-processor-id
+   MODEL_VERSION=your-model-version
+   API_KEY=your-api-key  # (Optional, for API access control)
    ```
 
-3. **Install the dependencies**:
+## Configuration
 
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Install Tesseract**:
-   - On Ubuntu:
-     ```bash
-     sudo apt-get install tesseract-ocr
-     ```
-   - On macOS:
-     ```bash
-     brew install tesseract
-     ```
-   - On Windows, download the installer from the [Tesseract website](https://github.com/tesseract-ocr/tesseract).
+- Update the environment variables in `.env` API_KEY=your-api-key for static API Key authentication.
 
 ## Usage
 
-1. **Run the Flask application**:
+1. Start the application:
 
    ```bash
-   flask run
+   python app.py
    ```
 
-2. **Access the application**:
+   The application runs on `http://0.0.0.0:5000` (localhost) by default in debug mode.
 
-   - Visit `http://127.0.0.1:5000/` to interact with the application.
+2. Make a POST request to the `/` endpoint with an image file in the `image` field of your multipart form data and `ocr_choice` easyocr or pytesseract ocr engine switch.  The API key needs to be included in the request header (if configured).
 
-3. **Endpoints**:
+### Example Request (using cURL)
 
-   - **`GET /`**: Returns a welcome message.
-   - **`GET /healthz`**: Returns the health status of the application.
-   - **`POST /`**: Upload an image for OCR processing. Requires an `X-API-KEY` header and form data with the image file.
+```bash
+curl -X POST http://localhost:5000/ \
+  -H "X-API-KEY: your_api_key" \
+  -F "image=@transcript.jpg" -F 'ocr_choice="easyocr"'
+```
 
-   **Example cURL request**:
+### Example Response (JSON)
 
-   ```bash
-   curl -X POST -H "X-API-KEY: YOUR_API_KEY" -F "image=@path_to_image/sample_ktp.png" -F "ocr_choice=easyocr" http://127.0.0.1:5000/
-   ```
+```json
+{
+    "error": false,
+    "message": "Proses OCR Berhasil",
+    "result": {
+        "nik": "3026061812510006",
+        "nama": "WIDIARSO",
+        "tempat_lahir": "PEMALANG,",
+        "tgl_lahir": "18-12-1959",
+        "jenis_kelamin": "LAKI-LAKI",
+        "agama": "ISLAM",
+        "status_perkawinan": "KAWIN",
+        "pekerjaan": "KARYAWAN SWASTA",
+        "alamat": {
+            "name": "SKU JLSUMATRA BLOK B78/15",
+            "rt_rw": "0037004",
+            "kel_desa": "MEKARSARI",
+            "kecamatan": "TAMBUN SELATAN",
+            "kabupaten": "KABUPATEN BEKASI",
+            "provinsi": "PROVINSI JAWA BARAT\n-"
+        },
+        "time_elapsed": 2.512
+    }
+}
+```
 
-## API Key Configuration
+### Testing
 
-The application requires an API key to access protected endpoints. The default API key is `67BD92FF-9408-43C4-A9F3-8CC942694F1E`.
+Implement unit tests for your functions using a framework like pytest.
+Manually test the API endpoint using tools like Postman or cURL as demonstrated in the “Usage” section.
 
-To change the API key:
+### Deployment (Docker Compose)
 
-1. Update the `API_KEY` in `app.py`.
-2. Pass the new API key in the `X-API-KEY` header with each request.
+```bash
+run docker-compose up
+```
 
-## Testing
+```yaml
+version: "3"
 
-To run the unit tests:
-
-1. **Install test dependencies**:
-
-   ```bash
-   pip install pytest pytest-cov
-   ```
-
-2. **Run the tests**:
-
-   ```bash
-   pytest
-   ```
-
-3. **Generate a test coverage report**:
-   ```bash
-   pytest --cov=app --cov-report=html
-   ```
-
-## Project Structure
-
-```plaintext
-ocr-ktp-flask/
-├── app.py              # Main Flask application
-├── tests/
-│   ├── test_app.py     # Unit tests for the application
-├── requirements.txt    # Python dependencies
-├── README.md           # Project documentation
-└── ...                 # Other necessary files
+services:
+  ocr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ocr
+    container_name: ocr
+    environment:
+      API_KEY: "your_value"
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    networks:
+      - ocr-network
+    command: gunicorn app:app -w 4 -t 90 --log-level=debug -b 0.0.0.0:8000 --reload --threads 2 --worker-class gevent --keep-alive 5 --timeout 60 --worker-connections 1000
+networks:
+  ocr-network:
+    driver: bridge
 ```
