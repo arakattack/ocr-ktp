@@ -29,11 +29,6 @@ This Flask application performs Optical Character Recognition (OCR) on Indonesia
 3. Create a file named `.env` in your project directory and add the following environment variables, replacing the placeholders with your actual values:
 
    ```env
-   GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/credentials.json
-   PROJECT_ID=your-project-id
-   LOCATION_ID=your-location-id
-   PROCESSOR_ID=your-processor-id
-   MODEL_VERSION=your-model-version
    API_KEY=your-api-key  # (Optional, for API access control)
    ```
 
