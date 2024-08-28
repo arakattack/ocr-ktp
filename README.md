@@ -1,3 +1,4 @@
+[![Python application](https://github.com/arakattack/ocr-ktp/actions/workflows/python-app.yml/badge.svg)](https://github.com/arakattack/ocr-ktp/actions/workflows/python-app.yml) [![Docker CI](https://github.com/arakattack/ocr-ktp/actions/workflows/docker-image.yml/badge.svg)](https://github.com/arakattack/ocr-ktp/actions/workflows/docker-image.yml)
 # OCR KTP Flask Application
 
 This Flask application performs Optical Character Recognition (OCR) on Indonesian KTP (Identity Card) images. The app uses `EasyOCR` and `Tesseract` to extract and process text from uploaded KTP images.
