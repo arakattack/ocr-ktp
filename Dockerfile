@@ -1,6 +1,5 @@
 FROM python:3.12.4-slim-bullseye
 WORKDIR /usr/src/app
-COPY .env.example .env
 COPY . .
 RUN apt-get update
 RUN pip install --upgrade pip
