@@ -26,7 +26,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update -y
-        sudo apt install tesseract-ocr libtesseract-dev -y
+        sudo apt install tesseract-ocr-ind libtesseract-dev -y
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
