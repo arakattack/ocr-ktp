@@ -24,9 +24,9 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update -y
-        sudo apt install -y  tesseract-ocr tesseract-ocr-ind ffmpeg libsm6 libxext6 pytest-cov
+        sudo apt install -y  tesseract-ocr tesseract-ocr-ind ffmpeg libsm6 libxext6
         python -m pip install --upgrade pip
-        pip install flake8 pytest
+        pip install pytest pytest-cov
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Test with pytest
       run: |
