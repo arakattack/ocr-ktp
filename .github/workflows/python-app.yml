@@ -13,10 +13,8 @@ permissions:
   contents: read
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.10
@@ -37,6 +35,7 @@ jobs:
 
   push_to_registry:
     name: Push Docker image to Docker Hub
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
