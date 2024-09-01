@@ -31,7 +31,7 @@ jobs:
     - name: Test with pytest
       run: |
         export API_KEY=67BD92FF-9408-43C4-A9F3-8CC942694F1E
-        python3 -m pytest --junitxml=./junit.xml
+        python3 -m pytest -v --cov=$CWD --cov-report html --color=yes
 
   push_to_registry:
     name: Push Docker image to Docker Hub
