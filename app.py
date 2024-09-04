@@ -117,7 +117,7 @@ def upload_image():
         img_pil = enhancer.enhance(2)
         img_cv2 = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
 
-        results = model.predict(np.array(img_cv2), imgsz=(480, 640))
+        results = model.predict(np.array(img_cv2), imgsz=(480, 640), iou=0.7, conf=0.5)
         pil_img = Image.fromarray(cv2.cvtColor(img_cv2, cv2.COLOR_BGR2RGB))
 
         extracted_data = {}
