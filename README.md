@@ -62,8 +62,8 @@ curl -X POST http://localhost:5000/ \
 ```json
 {
     "error": false,
-    "message": "Proses OCR Berhasil",
-    "result": {
+    "message": "OCR Success!",
+    "data": {
         "nik": "3026061812510006",
         "nama": "WIDIARSO",
         "tempat_lahir": "PEMALANG,",

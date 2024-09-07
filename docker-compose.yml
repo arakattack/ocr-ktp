@@ -2,19 +2,19 @@ version: "3"
 
 services:
   ocr:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: ocr
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: arakattack/ocr-ktp:main
     container_name: ocr
     environment:
-      API_KEY: "your_value"
+      API_KEY: "67BD92FF-9408-43C4-A9F3-8CC942694F1E"
     restart: unless-stopped
     ports:
       - "8000:8000"
     networks:
       - ocr-network
-    command: gunicorn app:app -w 4 -t 90 --log-level=debug -b 0.0.0.0:8000 --reload --threads 2 --worker-class gevent --keep-alive 5 --timeout 60 --worker-connections 1000
+    command: gunicorn app:app -w 4 -t 90 --log-level=debug -b 0.0.0.0:8000 --reload --threads 2 --worker-class gevent --keep-alive 5 --timeout 180 --worker-connections 1000
 networks:
   ocr-network:
     driver: bridge

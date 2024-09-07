@@ -24,7 +24,8 @@ def api_key_required(f):
         if not api_key or not validate_api_key(api_key):
             error_response = make_response(jsonify({
                 'error': True, 
-                'message': 'API key required'
+                'message': 'API key required',
+                'data':{}
                 }), 401)
             return error_response
         return f(*args, **kwargs)
@@ -81,22 +82,22 @@ def extract_date(date_text):
 
 @app.route('/')
 def hello():
-    return 'System Ready!', 200
-
+    return jsonify({"error": False, "message": "System Ready!","data":{}}), 200
+            
 @app.route('/healthz')
 def healthz():
-    return 'Healthy!', 200
+    return jsonify({"error": False, "message": "System Healthy!","data":{}}), 200
 
 @app.route('/', methods=['POST'])
 @api_key_required
 def upload_image():
     if 'image' not in request.files:
-        return jsonify({"error": True, "message": "No file part"}), 400
+        return jsonify({"error": True, "message": "No file part", "data": {}}), 400
 
     file = request.files['image']
 
     if file.filename == '':
-        return jsonify({"error": True, "message": "No selected file"}), 400
+        return jsonify({"error": True, "message": "No selected file", "data": {}}), 400
     
     # Get the OCR choice from the request, default to 'pytesseract' if not provided
     ocr_choice = request.form.get('ocr_choice', 'pytesseract').lower()
@@ -144,7 +145,7 @@ def upload_image():
                     ocr_result = reader.readtext(cropped_img_cv2, workers=2)
                     extracted_text = " ".join([detection[1] for detection in ocr_result])
                 else:
-                    return jsonify({"error": True, "message": "Invalid OCR choice"}), 400
+                    return jsonify({"error": True, "message": "Invalid OCR choice", "data": {}}), 400
 
                 extracted_data[class_name] = extracted_text
 
@@ -188,8 +189,8 @@ def upload_image():
         finish_time = time.time() - start_time
         response = {
             "error": False,
-            "message": "Proses OCR Berhasil",
-            "result": {
+            "message": "OCR Success!",
+            "data": {
                 "nik": extracted_data.get('nik', '').strip(),
                 "nama": extracted_data.get('nama', '').upper().strip().replace(":", ""),
                 "tempat_lahir": extracted_data.get('tempat_lahir', '').upper().strip(),
@@ -212,7 +213,7 @@ def upload_image():
         return jsonify(response), 200
 
     except Exception as e:
-        return jsonify({"error": True, "message": str(e)}), 500
+        return jsonify({"error": True, "message": str(e), "data": {}}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
