@@ -14,7 +14,7 @@ services:
       - "8000:8000"
     networks:
       - ocr-network
-    command: gunicorn app:app -w 4 -t 90 --log-level=debug -b 0.0.0.0:8000 --reload --threads 2 --worker-class gevent --keep-alive 5 --timeout 180 --worker-connections 1000
+    command: gunicorn app:app -w 4 -t 90 --log-level=debug -b 0.0.0.0:8000 --reload --threads 2 --worker-class gevent --keep-alive 5 --timeout 60 --worker-connections 1000
 networks:
   ocr-network:
     driver: bridge

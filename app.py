@@ -142,7 +142,7 @@ def upload_image():
                     extracted_text = pytesseract.image_to_string(threshed, lang="ind", config="--oem 3 --psm 6")
                 elif ocr_choice == "easyocr":
                     reader = easyocr.Reader(['id'])
-                    ocr_result = reader.readtext(cropped_img_cv2, workers=2)
+                    ocr_result = reader.readtext(cropped_img_cv2, workers=0)
                     extracted_text = " ".join([detection[1] for detection in ocr_result])
                 else:
                     return jsonify({"error": True, "message": "Invalid OCR choice", "data": {}}), 400
