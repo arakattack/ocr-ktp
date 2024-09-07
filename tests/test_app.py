@@ -75,7 +75,7 @@ class FlaskTestCase(unittest.TestCase):
             # Convert the response data to a dictionary
             response_data = response.get_json()
             print(response_data)
-            self.assertEqual(response_data['message'], "Proses OCR Berhasil")
+            self.assertEqual(response_data['message'], "OCR Success!")
 
 
 
