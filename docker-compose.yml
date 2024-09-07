@@ -5,7 +5,7 @@ services:
     # build:
     #   context: .
     #   dockerfile: Dockerfile
-    image: arakattack/ocr-ktp:main
+    image: arakattack/ocr-ktp:latest
     container_name: ocr
     environment:
       API_KEY: "67BD92FF-9408-43C4-A9F3-8CC942694F1E"
